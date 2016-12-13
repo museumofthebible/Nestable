@@ -291,14 +291,22 @@
         {
             var el = this.dragEl.children(this.options.itemNodeName).first();
             el[0].parentNode.removeChild(el[0]);
-            this.placeEl.replaceWith(el);
+            var moved = this.placeEl.replaceWith(el);
+
+            var model = JSON.parse(el.attr('data-model'));
+            var nextModel = el.next('li').length > 0 ? JSON.parse(el.next().attr('data-model')) : false;
+            var prevModel = el.prev('li').length > 0 ? JSON.parse(el.prev().attr('data-model')) : false;
+
+            var parent = el.parents('li:eq(0)').length > 0 ? JSON.parse(el.parents('li:eq(0)').attr('data-model')) : false;
 
             this.dragEl.remove();
-            this.el.trigger('change', [el]);
+            this.el.trigger('change', [el, model, prevModel, nextModel, parent]);
             if (this.hasNewRoot) {
-                this.dragRootEl.trigger('change', [el]);
+                this.dragRootEl.trigger('change', [el, model, prevModel, nextModel, parent]);
             }
             this.reset();
+
+            moved.remove();
         },
 
         dragMove: function(e)
