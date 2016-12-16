@@ -304,7 +304,6 @@
 
             this.el.trigger('change', [el, model, prevModel, nextModel, parent, sprint]);
             if (this.hasNewRoot) {
-                console.log('new root trigger');
                 this.dragRootEl.trigger('change', [el, model, prevModel, nextModel, parent, sprint]);
                 el.remove();
             }
@@ -315,8 +314,6 @@
 
         dragMove: function(e)
         {
-            console.log('drag');
-
             var list, parent, prev, next, depth,
                 opt   = this.options,
                 mouse = this.mouse;
