@@ -294,23 +294,29 @@
             var moved = this.placeEl.replaceWith(el);
 
             var model = JSON.parse(el.attr('data-model'));
-            var nextModel = el.next('li').length > 0 ? JSON.parse(el.next().attr('data-model')) : false;
-            var prevModel = el.prev('li').length > 0 ? JSON.parse(el.prev().attr('data-model')) : false;
+            var nextModel = el.next('li.dd-item').length > 0 && el.next().attr('data-model') ? JSON.parse(el.next().attr('data-model')) : false;
+            var prevModel = el.prev('li.dd-item').length > 0 && el.prev().attr('data-model') ? JSON.parse(el.prev().attr('data-model')) : false;
+            var sprint = el.parents('.task-wrapper:eq(0)').attr('data-sprint-id') ? el.parents('.task-wrapper:eq(0)').attr('data-sprint-id') : false;
 
             var parent = el.parents('li:eq(0)').length > 0 ? JSON.parse(el.parents('li:eq(0)').attr('data-model')) : false;
 
             this.dragEl.remove();
-            this.el.trigger('change', [el, model, prevModel, nextModel, parent]);
+
+            this.el.trigger('change', [el, model, prevModel, nextModel, parent, sprint]);
             if (this.hasNewRoot) {
-                this.dragRootEl.trigger('change', [el, model, prevModel, nextModel, parent]);
+                console.log('new root trigger');
+                this.dragRootEl.trigger('change', [el, model, prevModel, nextModel, parent, sprint]);
+                el.remove();
             }
-            this.reset();
 
             moved.remove();
+            this.reset();
         },
 
         dragMove: function(e)
         {
+            console.log('drag');
+
             var list, parent, prev, next, depth,
                 opt   = this.options,
                 mouse = this.mouse;
@@ -419,6 +425,7 @@
                 isEmpty = true;
             }
             else if (!this.pointEl.length || !this.pointEl.hasClass(opt.itemClass)) {
+                //console.log(this.pointEl);
                 return;
             }
 
@@ -443,9 +450,10 @@
                 parent = this.placeEl.parent();
                 // if empty create new list to replace empty placeholder
                 if (isEmpty) {
-                    list = $(document.createElement(opt.listNodeName)).addClass(opt.listClass);
-                    list.append(this.placeEl);
-                    this.pointEl.replaceWith(list);
+                    this.pointEl.before(this.placeEl);
+                    //list = $(document.createElement(opt.listNodeName)).addClass(opt.listClass);
+                    //list.append(this.placeEl);
+                    //this.pointEl.replaceWith(list);
                 }
                 else if (before) {
                     this.pointEl.before(this.placeEl);
@@ -457,7 +465,7 @@
                     this.unsetParent(parent.parent());
                 }
                 if (!this.dragRootEl.find(opt.itemNodeName).length) {
-                    this.dragRootEl.append('<div class="' + opt.emptyClass + '"/>');
+                    //this.dragRootEl.append('<div class="' + opt.emptyClass + '"/>');
                 }
                 // parent root list has changed
                 if (isNewRoot) {
