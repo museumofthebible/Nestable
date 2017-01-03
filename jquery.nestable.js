@@ -307,6 +307,11 @@
                 this.dragRootEl.trigger('change', [el, model, prevModel, nextModel, parent, sprint]);
                 el.remove();
             }
+            else if(!parent) {
+                el.remove();
+            }
+
+            el.remove();
 
             moved.remove();
             this.reset();
@@ -422,7 +427,6 @@
                 isEmpty = true;
             }
             else if (!this.pointEl.length || !this.pointEl.hasClass(opt.itemClass)) {
-                //console.log(this.pointEl);
                 return;
             }
 
