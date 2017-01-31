@@ -438,6 +438,9 @@
              * move vertical
              */
             if (!mouse.dirAx || isNewRoot || isEmpty) {
+
+                console.log(pointElRoot);
+
                 // check if groups match if dragging over new root
                 if (isNewRoot && opt.group !== pointElRoot.data('nestable-group')) {
                     return;
@@ -452,6 +455,7 @@
                 // if empty create new list to replace empty placeholder
                 if (isEmpty) {
                     this.pointEl.before(this.placeEl);
+                    pointElRoot.trigger('over', [pointElRoot]);
                     //list = $(document.createElement(opt.listNodeName)).addClass(opt.listClass);
                     //list.append(this.placeEl);
                     //this.pointEl.replaceWith(list);
@@ -470,6 +474,7 @@
                 }
                 // parent root list has changed
                 if (isNewRoot) {
+                    this.dragRootEl.trigger('out', [this.dragRootEl]);
                     this.dragRootEl = pointElRoot;
                     this.hasNewRoot = this.el[0] !== this.dragRootEl[0];
                 }
