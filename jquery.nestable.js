@@ -439,8 +439,6 @@
              */
             if (!mouse.dirAx || isNewRoot || isEmpty) {
 
-                console.log(pointElRoot);
-
                 // check if groups match if dragging over new root
                 if (isNewRoot && opt.group !== pointElRoot.data('nestable-group')) {
                     return;
